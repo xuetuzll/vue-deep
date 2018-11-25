@@ -5,17 +5,43 @@ export default [
     path: '/',
     alias: '/home_page',
     name: 'home',
-    component: Home
+    component: Home,
+    props: route => ({
+      //() => ({})  等价于 () => { return {} }
+      food: route.query.food
+    }),
+    beforeEnter: (to, from, next) => {
+      if(from.name === 'login') alert('这是从登录页来的')
+      else alert('这不是从登录页来的')
+      next()
+    }
+    //路由内的独享守卫，专门针对特定路由的守卫
+    /*
+      主要就是路由的跳转进行判断后的逻辑处理
+      没有next()是不会进行跳转的
+    */
   },
   {
     path: '/about',
     name: 'about',
-    component: () => import('@/views/About.vue')
+    component: () => import('@/views/About.vue'),
+    props: {
+      food: 'banana'
+    },
+    meta: {
+      title: '关于'
+    }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login.vue')
   },
   {
     path: '/argu/:name',
     name: 'argu',
-    component: () => import('@/views/argu.vue')
+    component: () => import('@/views/argu.vue'),
+    props: true
   },
   {
     path: '/parent',
@@ -39,6 +65,14 @@ export default [
   {
     path: '/main',
     redirect: '/'
+  },
+  {
+    path: '/store',
+    component: () => import('@/views/store.vue')
+  },
+  {
+    path: '*',
+    component: () => import('@/views/error_404.vue')
   }
 ]
 
