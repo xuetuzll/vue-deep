@@ -1,10 +1,15 @@
 <template>
   <div>
-    <a-input @input="handleInput" />
-    <p>{{ inputValue }} -> lastLetter is {{ inputValueLastLetter }}</p>
+    <a-input v-model="stateValue"/>
+    <p>{{ stateValue }} -> lastLetter is {{ inputValueLastLetter }}</p>
     <!-- <a-show :content="inputValue"></a-show> -->
     <p>appName: {{ appName }},appNameWithVersion: {{ appNameWithVersion }}</p>
     <p>userName: {{ userName }}, firstLetter is {{ firstLetter }}</p>
+    <button @click="handleChangeAppName">修改appName</button>
+    <p>{{ appVersion }}</p>
+    <button @click="changeUserName">修改用户名</button>
+    <button @click="registerModule">动态注册模块</button>
+    <p v-for="(item, index) in todoList" :key="index">{{ item }}</p>
   </div>
 </template>
 
@@ -14,7 +19,7 @@ import AShow from '_c/AShow.vue'
 
 // import { createNamespacedHelpers } from 'vuex'
 // const { mapState } = createNamespacedHelpers('user')
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'store',
@@ -32,11 +37,21 @@ export default {
     //   'appName'
     // ])
     ...mapState('user', {
-      userName: state => state.userName,
+      userName: state => state.userName
     }),
     ...mapState({
-      appName: state => state.appName
+      appName: state => state.appName,
+      appVersion : state => state.appVersion,
+      todoList: state => state.todo ? state.todo.todoList : []
     }),
+    stateValue: {
+      get (){
+        return this.$store.state.stateValue
+      },
+      set (value){
+        this.SET_STATE_VALUE(value)
+      }
+    },
     ...mapGetters([
       'appNameWithVersion'
     ]),
@@ -54,8 +69,45 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'SET_APP_NAME',
+      'SET_STATE_VALUE'
+    ]),
+    ...mapMutations('user', [
+      'SET_USER_NAME'
+    ]),
+    ...mapActions([
+      'updateAppName'
+    ]),
     handleInput (val){
       this.inputValue = val
+    },
+    handleChangeAppName (){
+      // this.$store.commit({
+      //   type: 'SET_APP_NAME',
+      //   appName: 'newAppName'
+      // })
+      // this.$store.commit('SET_APP_VERSION')
+      // this.SET_APP_NAME('newAppName')
+      // this.updateAppName()
+      this.$store.dispatch('updateAppName', '123')
+    },
+    changeUserName (){
+      // this.$store.state.user.userName = 'haha'
+      this.SET_USER_NAME('vue-cource')
+    },
+    registerModule (){
+      this.$store.registerModule('todo', {
+        state: {
+          todoList: [
+            '学习mutations',
+            '学习actions'
+          ]
+        }
+      })
+    },
+    handleStateValueChange (val){
+      this.SET_STATE_VALUE(val)
     }
   }
 }
@@ -92,4 +144,27 @@ import { mapState } from 'vuex'
 计算属性对应的方法，可以像data的数据一样被视图单项绑定
 mapGetters不知道如何使用对象的方式去使用
 */
+
+/*
+想修改store里面的值，不能直接通过，绑定一个方法让他去修改视图
+*/
+
+//重点：vuex里每一个方法的本质去修改state的数据
+/*
+  state类似与data数据，本身含有两个set设置数据，get返回获取的数据
+  getters是对data进行修改（补充添加），一般是全局定义版本一类固定的模式
+  mutations是对data进行修改（替换更新）
+  commit提交mutations里的一个方法名，可以不附带传递过去的值，通过mutations去修改state的数据
+  如果使用展开符，把方法名数组形式定义在展开符里，this.方法名传参
+*/
+
+//动态注册的模块和开启命名空间的模块使用是一样的
+//使用动态注册模块和for结合能动态渲染需要的数据
+
+//如果想给模块添加一个子模块，使用数组的形式['父模块名', '子模块名']
+
+//vuex中state要实现双向绑定
+//直接用语法糖和mapState挂载数据会报错没有使用set方法
+//vuex的双向绑定，通过mutation去设置值，需要改语法糖为属性绑定加方法名
+//另一种方式更好：语法糖，数据设置set和get方法，一样通过mutation
 </script>
