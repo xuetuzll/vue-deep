@@ -49,6 +49,11 @@ export default [
     component: () => import('@/views/count-to.vue'),
   },
   {
+    path: '/menu-page',
+    name: 'menu-page',
+    component: () => import('@/views/menu-page.vue'),
+  },
+  {
     path: '/render-page',
     name: 'render-page',
     component: () => import('@/views/render-page.vue'),

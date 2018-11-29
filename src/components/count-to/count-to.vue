@@ -10,7 +10,7 @@ export default {
   name: 'CountTo',
   computed: {
     eleId (){
-      return `count_up_${this.uid}`
+      return `count_up_${this._uid}`
     },
     countClass (){
       return [
@@ -123,6 +123,8 @@ export default {
 //发射出去的数据父组件触发是不需要值，方法是用时，把值显示出来
 
 //需要新样式，导入样式
+
+//注意_uid有_
 </script>
 
 

@@ -10,7 +10,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import { getUserInfo } from '@/api/user'
 
@@ -22,7 +21,7 @@ export default {
   data (){
     return {
       url: '',
-      baColor: ''
+      bgColor: ''
     }
   },
   props: {
