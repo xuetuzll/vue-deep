@@ -1,20 +1,27 @@
 import Home from '@/views/Home.vue'
+import Layout from '@/views/layout.vue'
 
 export default [
   {
     path: '/',
     alias: '/home_page',
     name: 'home',
-    component: Home,
-    props: route => ({
-      //() => ({})  等价于 () => { return {} }
-      food: route.query.food
-    }),
-    beforeEnter: (to, from, next) => {
-      if(from.name === 'login') alert('这是从登录页来的')
-      else alert('这不是从登录页来的')
-      next()
-    }
+    component: Layout,
+    children: [
+      {
+        path: 'home',
+        component: Home
+      }
+    ]
+    // props: route => ({
+    //   //() => ({})  等价于 () => { return {} }
+    //   food: route.query.food
+    // }),
+    // beforeEnter: (to, from, next) => {
+    //   if(from.name === 'login') alert('这是从登录页来的')
+    //   else alert('这不是从登录页来的')
+    //   next()
+    // }
     //路由内的独享守卫，专门针对特定路由的守卫
     /*
       主要就是路由的跳转进行判断后的逻辑处理

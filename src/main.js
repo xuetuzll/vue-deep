@@ -4,12 +4,15 @@ import router from './router'
 import store from './store'
 import Bus from './lib/bus'
 import CountTo from '_c/count-to'
+import iview from 'iview'
+import 'iview/dist/styles/iview.css'
 
-//在生产环境引入mock
-if(process.env.NODE_ENV !== 'production') require('./mock')
+//在生产环境引入mock,请求真实接口，把mock.js注释
+// if(process.env.NODE_ENV !== 'production') require('./mock')
 
 Vue.config.productionTip = false
 Vue.prototype.$bus = Bus
+Vue.use(iview)
 
 const handleClick = event => {
   console.log(event)

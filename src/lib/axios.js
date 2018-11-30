@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { baseURL } from '@/config'
+import { getToken } from '@/lib/util'
 
 class HttpRequest {
   constructor (baseUrl = baseURL){ //默认会添加的构造函数
@@ -28,14 +29,15 @@ class HttpRequest {
       if(!Object.keys(this.queue).length) //Spin.show()
       //如果队列长度不为0,则加载全局动画
       this.queue[url] = true //传入options的url其中一个
+      config.headers['Authorization'] = getToken()
       return config
     }, error => {
       return Promise.reject(error)
     })
     instance.interceptors.response.use(res => { //响应拦截器
       this.distory(url) //响应成功失败都需要删掉
-      const { data, status } = res //返回需要的数据
-      return { data, status }
+      const { data } = res //返回需要的数据
+      return data
     }, error => {
       this.distory(url) //响应成功失败都需要删掉
       return Promise.reject(error)
@@ -55,3 +57,13 @@ export default HttpRequest
 
 //把baseUrl基础路径拆出去，拆到config文件内
 //baseUrl = baseURL这种写法前面没有this的
+
+//axios.js的本质 构造函数，设置配置，全局拦截器，创建请求
+//constructor构造函数：基础路径，请求栈
+//getInsideConfig方法：根据后台需求设置项目配置文件
+//包含基础路径和请求头
+//interceptors全局拦截器（instance, url）
+//包含instance.interceptors.request请求拦截器
+//包含instance.interceptors.response响应拦截器
+//request创建请求，要把传进来的配置与内部配置和并
+

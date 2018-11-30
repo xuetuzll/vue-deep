@@ -15,7 +15,7 @@ module.exports = {
   },
   productionSourceMap: false,
   devServer: {
-    // proxy: 'http://localhost:4000'
+    proxy: 'http://localhost:4000'
   }
 }
 //eslink的检测
@@ -25,6 +25,6 @@ module.exports = {
 
 /*跨域配置,可以使用后端定义跨域请求，
 也可以使用devServer配置服务端代理的url请求。
-
-
 */
+
+ //如果设置代理，请求的基础路径要设置为空字符串

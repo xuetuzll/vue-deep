@@ -1,17 +1,32 @@
 <template>
   <div class="home">
-    <b>{{ food }}</b>
+    <!-- <b>{{ food }}</b>
     <button @click="handleClick('back')">返回上一页</button>
     <button @click="handleClick('push')">跳转到parent</button>
     <button @click="handleClick('replace')">替换到parent</button>
     <button @click="getInfo" :style="{ background: bgColor }">请求数据</button>
     <img :src="url">
+    <button @click="handleLogout">退出登录</button> -->
+    <Row>
+      <i-col></i-col>
+    </Row>
+    <Row :gutter="10">
+      <i-col span="12"></i-col>
+      <i-col span="12"></i-col>
+    </Row>
+    <Row :gutter="10" class="blue">
+      <i-col :md="6" :sm="12" :xs="24"></i-col>
+      <i-col :md="6" :sm="12" :xs="24"></i-col>
+      <i-col :md="6" :sm="12" :xs="24"></i-col>
+      <i-col :md="6" :sm="12" :xs="24"></i-col>
+    </Row>
   </div>
 </template>
 
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
 import { getUserInfo } from '@/api/user'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'home',
@@ -63,6 +78,15 @@ export default {
         this.url = res.data.img
         this.bgColor = res.data.color
       })
+    },
+    ...mapActions('user', [
+      'logout'
+    ]),
+    handleLogout (){
+      this.logout()
+      this.$router.push({
+        name: 'login'
+      })
     }
   }
 }
@@ -87,8 +111,24 @@ from.name代表从哪个页面进来（上一个页面）。
 根据next(变量真假)判断是否执行next
 */
 
-
-
-
-
 </script>
+
+<style lang="less">
+.home{
+  .ivu-col{
+    height: 50px;
+    margin-top: 10px;
+    background: orange;
+    background-clip: content-box;
+  }
+}
+.blue{
+  .ivu-col{
+    background: blue;
+    background-clip: content-box;
+  }
+}
+
+//background-clip: content-box;内容区域显示背景色
+</style>
+

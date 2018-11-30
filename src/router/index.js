@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './router'
+import store from '@/store'
 //结构赋值
-import { setTitle } from '@/lib/util'
+import { setTitle, setToken, getToken } from '@/lib/util'
 
 Vue.use(Router)
 
@@ -22,6 +23,22 @@ router.beforeEach((to, from, next) => {
     if(HAS_LOGINED) next({ name: 'home' })
     else next()
   }
+  const token = getToken()
+  // if(token){
+  //   //有token，调用服务端接口判断token是否有效
+  //   //注意注意，有了命名空间，所有的dispatch异步操作，commit同步操作
+  //   //都需要加上命名前缀
+  //   store.dispatch('user/authorization', token).then(() => {
+  //     if(to.name === 'login') next({ name: 'home' })
+  //     else next()
+  //   }).catch(() => {
+  //     setToken('')
+  //     next({ name: 'login' })
+  //   })
+  // } else {
+  //   if(to.name === 'login') next()
+  //   else next({ name: 'login' })
+  // }
 })
 
 //router.beforeResolve
