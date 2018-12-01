@@ -1,7 +1,7 @@
 <template>
   <div class="layout-wrapper">
     <Layout class="layout-outer">
-      <Sider collapsible hide-trigger breakpoint="sm" v-model="collapsed">
+      <Sider width="180" collapsible hide-trigger v-model="collapsed"> <!--加入breakpoint则自动对应屏幕变成最小-->
         <side-menu :collapsed="collapsed" :list="menuList"></side-menu>
       </Sider>
       <Layout>
@@ -28,7 +28,7 @@ export default {
   },
   data (){
     return {
-      collapsed: false,
+      collapsed: true,
       menuList: [
         {
           title: '11111',
@@ -77,11 +77,6 @@ export default {
       return [
         'trigger-icon',
         this.collapsed ? 'rotate' : ''
-      ]
-    },
-    menuitemClasses (){
-      return [
-        ''
       ]
     }
   },
