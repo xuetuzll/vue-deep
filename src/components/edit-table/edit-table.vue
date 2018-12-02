@@ -30,6 +30,7 @@ export default {
     }
   },
   methods: {
+    //column.key代表纵坐标
     handleClick ({ row, column, index }){
       console.log({ row, column, index })
       if(this.edittingId === `${index}_${column.key}`){
@@ -40,6 +41,7 @@ export default {
         this.$emit('input', tableData)
         this.$emit('on-edit', { row, column, index, newValue: this.edittingContent })
         this.edittingId = ''
+        this.edditingContent = ''
       } else {
         this.edittingId = `${index}_${column.key}`
       }
@@ -102,5 +104,13 @@ export default {
 //表格数据的保存：找到对应的行和列，深度拷贝后赋值，把数据发送到自定义按钮上调用，把数据发送到父级调用
 //自定义按钮和父级的方法调用修改数据
 //watch对自定义表格的监听
+
+//bind()为元素添加事件处理程序
+//实现的方式：组件一创建绑定jsx表格编辑之后通过按钮事件控制显示内容，
+//输入框一般使用语法糖或拆开使用，jsx渲染按钮使用事件名.bind()
+//最终以深拷贝赋值实现
+//column每一列发生变化时都需要调用自定义渲染列表
+
+
 
 </script>

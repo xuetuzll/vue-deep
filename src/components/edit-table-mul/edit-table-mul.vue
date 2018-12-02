@@ -8,8 +8,8 @@ export default {
   name: 'EditTable',
   data (){
     return {
-      insideData: [],
-      insideColumns: [],
+      insideData: [], //所有的信息
+      insideColumns: [], //符合要求的信息
       edittingId: '',
       endittingContent: ''
     }
@@ -35,8 +35,8 @@ export default {
   },
   methods: {
     handleClick ({ row, column, index }){
-      let keyIndex = this.insideData[index].edittingKeyArr ? this.insideData[index].edittingKeyArr.indexOf(column.key) : -1
       let rowObj = this.insideData[index]
+      let keyIndex = rowObj.edittingKeyArr ? rowObj.edittingKeyArr.indexOf(column.key) : -1
       if(keyIndex > -1){
         rowObj.edittingKeyArr.splice(keyIndex, 1)
         this.insideData.splice(index, 1, rowObj)
@@ -51,12 +51,22 @@ export default {
       this.insideData[index][column.key] = newValue
     },
     handleColumns (){
+      //this.value的数据来自于自定义渲染的所有信息
       this.insideData = clonedeep(this.value)
       const insideColumns = this.columns.map(item => {
       if(!item.render && item.editable){
         item.render = (h, { row, column, index }) => {
+          //column.key是自定义渲染里面每一类的关键字
+          //row包含的是每一类关键字的信息
           const keyArr = this.insideData[index] ? this.insideData[index].edittingKeyArr : ''
-          // const isEditting = this.edittingId === `${index}_${column.key}`
+          //有个很有意思的逻辑：keyArr = 有每一行的信息让它等于一个未定义的变量
+          //在jsx渲染里做判断，如果 keyArr存在并且找到对应的数据，indexOf没找到-1，找到 > -1
+          //从多个中找一个的原理：数据里有一个未定义的属性，判断这个属性存在与否并且找到需要的数据
+          //注意自定义render渲染的是什么，组件，数组，元素。
+          //在jsx里面对每一列进行判断，当按钮点击的时候，触发点击事件如果没有坐标则给对应的行添加坐标
+          //如果有坐标在总数据里替换出坐标的数据，emit发送数据，让表数据监听。
+          //把当前的点击传出去，在jsx里面使用bind为元素添加一个运行函数
+          //每一次表头数据发生改变的时候，重现渲染一次自定义表格。
           return (
             <div>
               {keyArr && keyArr.indexOf(column.key) > -1
