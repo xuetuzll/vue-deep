@@ -13,6 +13,7 @@ export const getToken = (tokenName = 'token') => {
   return Cookie.get(tokenName)
 }
 
+//把文件的文件夹id倒叙放入文件夹id中，这两个id对应相等
 export const putFileInFolder = (folderList, fileList) => {
   //拷贝文件和文件夹
   const folderListCloned = clonedeep(folderList)
@@ -48,6 +49,9 @@ export const putFileInFolder = (folderList, fileList) => {
 //把handle方法返回出去
 //数据变成树状图，第一层有几个最终显示几个
 //第二层的id等于第一层的第id个，id超过第一层的个数，不显示。
+
+//递归循环本身，文件夹的文件夹id等于文件夹id
+//这种方法只能是两层
 export const transferFolderToTree = folderList => {
   if(!folderList.length) return []
   const folderListCloned = clonedeep(folderList)
@@ -69,6 +73,28 @@ export const transferFolderToTree = folderList => {
     return arr
   }
   return handle(0) //所有第一级的handle为0
+}
+
+export const expandSpecifiedFolder = (folderTree, id) => {
+  return folderTree.map(item => {
+    if(item.type === 'folder'){
+      if(item.id === id){
+        item.expand = true
+      } else {
+        if(item.children && item.children.length){
+          item.children = expandSpecifiedFolder(item.children, id)
+          if(item.children.some(child => {
+            return child.expand === true
+          })) {
+            item.expand = true
+          } else {
+            item.expand = false
+          }
+        }
+      }
+    }
+    return item
+  })
 }
 
 //业务相关的功能，设置title，设置cookie，获取cookie

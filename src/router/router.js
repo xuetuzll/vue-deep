@@ -17,7 +17,7 @@ export default [
         component: () => import('@/views/table.vue')
       },
       {
-        path: 'folder_tree',
+        path: 'folder-tree',
         component: () => import('@/views/folder-tree/folder-tree.vue')
       }
     ]
