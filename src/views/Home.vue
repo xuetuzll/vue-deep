@@ -20,13 +20,15 @@
       <i-col :md="6" :sm="12" :xs="24"></i-col>
       <i-col :md="6" :sm="12" :xs="24"></i-col>
     </Row>
+    <Button v-if="rules.edit_button">编辑</Button>
+    <Button v-if="rules.publish_button">发布</Button>
   </div>
 </template>
 
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
 import { getUserInfo } from '@/api/user'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'home',
@@ -44,6 +46,11 @@ export default {
       type: String,
       default: 'apple'
     }
+  },
+  computed: {
+    ...mapState({
+      rules: state => state.user.rules
+    })
   },
   beforeRouteEnter (to, from, next){
     next(vm => {

@@ -53,3 +53,48 @@ import Mock from 'mockjs'
    }
    return Mock.mock(template)
  }
+
+ export const login = () => {
+   return {
+     code: 200,
+     data: {
+       token: 'xxx'
+     },
+     mes: ''
+   }
+ }
+
+ //通过v-if来控制的，路由列表里面，所有的字段都需要有这个name，但是不能重复
+ export const authorization = () => {
+   return {
+     code: 200,
+     data: {
+       token: 'xxx',
+       rules: {
+         page: {
+           home: true,
+           home_index: true,
+           about: true,
+           argu: true,
+           count_to: true,
+           menu_page: true,
+           upload: true,
+           form: false,
+           folder_tree: true,
+           table_page: true,
+           render_page: true,
+           split_pane: true,
+           parent: true,
+           child: true,
+           store: true,
+           main: true
+         },
+         component: {
+           edit_button: true,
+           publish_button: false
+         }
+       }
+     },
+     mes: ''
+   }
+ }

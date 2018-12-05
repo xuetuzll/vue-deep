@@ -10,4 +10,13 @@ router.get('/getUserInfo', function(req, res, next) {
   res.send('success')
 })
 
+router.post('/formData', function (req, res, next) {
+  console.log(req.body)
+  if(req.body.name !== 'lison'){
+    res.status(401).send({
+      name: '名字不对'
+    })
+  } else res.send('success')
+})
+
 module.exports = router;

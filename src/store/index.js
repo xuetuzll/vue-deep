@@ -6,6 +6,7 @@ import mutations from './mutations'
 import actions from './actions'
 
 import user from './module/user'
+import router from './module/router'
 import saveInLocal from './plugin/saveInLocal'
 
 Vue.use(Vuex)
@@ -17,9 +18,10 @@ export default new Vuex.Store({
   mutations,
   actions,
   modules: {
-    user
-  },
-  plugins: [saveInLocal]
+    user,
+    router
+  }
+  // plugins: [saveInLocal]
 })
 
 //加载插件：因为store的东西存在内存中刷新浏览器会被清除。

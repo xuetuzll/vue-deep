@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { baseURL } from '@/config'
-// import { getToken } from '@/lib/util'
+import { getToken } from '@/lib/util'
 
 class HttpRequest {
   constructor (baseUrl = baseURL){ //默认会添加的构造函数
@@ -31,7 +31,7 @@ class HttpRequest {
       }
       //如果队列长度不为0,则加载全局动画
       this.queue[url] = true //传入options的url其中一个
-      // config.headers['Authorization'] = getToken()
+      config.headers['Authorization'] = getToken()
       return config
     }, error => {
       return Promise.reject(error)
@@ -42,7 +42,7 @@ class HttpRequest {
       return data
     }, error => {
       this.distory(url) //响应成功失败都需要删掉
-      return Promise.reject(error)
+      return Promise.reject(error.response.data)
     })
   }
   request (options){

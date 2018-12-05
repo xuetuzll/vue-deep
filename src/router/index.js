@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import routes from './router'
+import { routes } from './router'
 import store from '@/store'
 //结构赋值
 import { setTitle, setToken, getToken } from '@/lib/util'
+import clonedeep from 'clonedeep'
 
 Vue.use(Router)
 
@@ -12,18 +13,19 @@ const router =  new Router({
   routes
 })
 
-const HAS_LOGINED = true
+const HAS_LOGINED = false
 
 router.beforeEach((to, from, next) => {
   to.meta && setTitle(to.meta.title)
-  if(to.name !== 'login'){
-    if(HAS_LOGINED) next()
-    else next({ name: 'login' })
-  } else {
-    if(HAS_LOGINED) next({ name: 'home' })
-    else next()
-  }
-  const token = getToken()
+  // if(to.name !== 'login'){
+  //   if(HAS_LOGINED) next()
+  //   else next({ name: 'login' })
+  // } else {
+  //   if(HAS_LOGINED) next({ name: 'home' })
+  //   else next()
+  // }
+
+  // const token = getToken()
   // if(token){
   //   //有token，调用服务端接口判断token是否有效
   //   //注意注意，有了命名空间，所有的dispatch异步操作，commit同步操作
@@ -39,6 +41,24 @@ router.beforeEach((to, from, next) => {
   //   if(to.name === 'login') next()
   //   else next({ name: 'login' })
   // }
+
+  const token = getToken()
+  if(token){
+    if (!store.state.router.hasGetRules){
+      store.dispatch('user/authorization').then(rules => {
+        store.dispatch('concatRoutes', rules).then(routers => {
+          //如果使用深拷贝，会导致嵌套路由的一级组件不服用，所以建议不做深拷贝，吧vue的严格模式设置为false
+          router.addRoutes(clonedeep(routers))
+          next({ ...to, replace: true })
+        }).catch(() => {
+          next({ name: 'login' })
+        })
+      })
+    } else next()
+  } else {
+    if(to.name === 'login') next()
+    else next({ name: 'login' })
+  }
 })
 
 //router.beforeResolve

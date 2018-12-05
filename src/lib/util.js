@@ -97,4 +97,21 @@ export const expandSpecifiedFolder = (folderTree, id) => {
   })
 }
 
+//模拟提交一个表单的方法
+export const downloadFile = ({ url, params, }) => {
+  const form = document.createElement('form')
+  form.setAttribute('action', url)
+  form.setAttribute('method', 'post')
+  for (const key in params){
+    const input = document.createElement('input')
+    input.setAttribute('type', 'hidden')
+    input.setAttribute('name', key)
+    input.setAttribute('value', params[key])
+    form.appendChild(input)
+  }
+  document.body.appendChild(form)
+  form.submit()
+  form.remove()
+}
+
 //业务相关的功能，设置title，设置cookie，获取cookie

@@ -1,11 +1,15 @@
 import Mock from 'mockjs'
 //导入mock定义的数据
-import { getUserInfo } from './response/user'
+import { getUserInfo, authorization, login } from './response/user'
 import { getTableData, getFileList, getFolderList } from './data'
 
 const Random = Mock.Random
 
 Mock.mock('/getUserInfo', 'post', getUserInfo)
+
+Mock.mock('/index/login', 'post', login)
+
+Mock.mock('/users/authorization', 'get', authorization)
 
 Mock.mock('/getTableData', 'get', getTableData)
 

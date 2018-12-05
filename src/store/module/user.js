@@ -2,7 +2,8 @@ import { login, authorization } from '@/api/user'
 import { setToken } from '@/lib/util'
 
 const state = {
-  userName: 'lison'
+  userName: 'lison',
+  rules: {}
 }
 const getters = {
   firstLetter: state => {
@@ -10,8 +11,12 @@ const getters = {
   }
 }
 const mutations = {
+  //吧数据挂载在state上
   SET_USER_NAME (state, params){
     return state.userName = params
+  },
+  SET_RULES (state, rules){
+    state.rules = rules
   }
 }
 const actions = {
@@ -46,7 +51,10 @@ const actions = {
           reject(new Error('token error'))
         } else {
           setToken(res.data.token)
-          resolve()
+          //返回调用接口获取到的数据
+          resolve(res.data.rules.page)
+          //提交一个方法，把数据传过去
+          commit('SET_RULES', res.data.rules.component)
         }
       }).catch(error => {
         reject(error)
